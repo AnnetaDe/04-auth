@@ -1,6 +1,6 @@
 const ctrl = require('../helpers/ctrl.js');
 const HttpError = require('../helpers/HttpError');
-const { ContactDB } = require('../db/contactsSchema');
+const { ContactDB } = require('../db/models/Contacts.js');
 const getAllContacts = async (req, res) => {
   const result = await ContactDB.find({});
   res.json(result);

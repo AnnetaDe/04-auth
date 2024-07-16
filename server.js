@@ -4,13 +4,16 @@ const cors = require('cors');
 const app = express();
 const initMongoDB = require('./db/initMongoDB');
 const contactsRouter = require('./routes/contactsRouter');
+const authRouter = require('./routes/auth-router');
 const { configDotenv } = require('dotenv');
 const PORT = configDotenv().parsed.PORT;
+
 const startServer = () => {
   app.use(morgan('tiny'));
   app.use(cors());
   app.use(express.json());
   app.use('/api/contacts', contactsRouter);
+  app.use('./api/auth', authRouter);
   app.use((_, res) => {
     res
       .status(404)

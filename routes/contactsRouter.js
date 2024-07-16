@@ -9,7 +9,7 @@ const {
   updateFavorite,
 } = require('../controllers/contactsControllers');
 
-const { schemas } = require('../db/contactsSchema.js');
+const { schemas } = require('../db/models/Contacts.js');
 const validateBody = require('../helpers/validateBody');
 const isValidId = require('../helpers/isValidId');
 
