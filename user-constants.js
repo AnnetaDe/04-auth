@@ -1,3 +1,2 @@
-const emailRegex = '^[w-.]+@([w-]+.)+[w-]{2,4}$';
-
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 module.exports = emailRegex;

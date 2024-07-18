@@ -40,4 +40,8 @@ const authSchemas = {
 };
 const User = model('user', userSchema);
 userSchema.post('save', handleMongooseError);
-userSchema.pre('findOneAndUpdate', setMongoUpdateSettings);
+// userSchema.pre('findOneAndUpdate', setMongoUpdateSettings);
+module.exports = {
+  User,
+  authSchemas,
+};

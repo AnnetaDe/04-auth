@@ -3,6 +3,10 @@ const { Schema, model } = require('mongoose');
 const handleMongooseError = require('../../helpers/handleMongooseError');
 
 const contactSchema = new Schema({
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+  },
   name: {
     type: String,
     required: true,

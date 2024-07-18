@@ -12,12 +12,11 @@ const startServer = () => {
   app.use(morgan('tiny'));
   app.use(cors());
   app.use(express.json());
-  app.use('/api/contacts', contactsRouter);
   app.use('./api/auth', authRouter);
+  app.use('/api/contacts', contactsRouter);
+
   app.use((_, res) => {
-    res
-      .status(404)
-      .json({ message: 'you are at http://localhost:3000/hello.html' });
+    res.status(404).json({ message: 'not found' });
   });
   app.use((err, req, res, next) => {
     const { status = 500, message = 'Server error' } = err;

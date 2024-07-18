@@ -1,7 +1,11 @@
 const express = require('express');
 const validateBody = require('../helpers/validateBody');
-const ctrl = require('../helpers/ctrl');
-const { schemas } = require('../db/models/User');
+const controller = require('../controllers/authControllers');
+const { authSchemas } = require('../db/models/User');
 const authRouter = express.Router();
-authRouter.post('/register', validateBody(schemas.registerSchema));
+authRouter.post(
+  '/register',
+  validateBody(authSchemas.registerSchema),
+  controller.register
+);
 module.exports = authRouter;
