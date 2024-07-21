@@ -5,7 +5,7 @@ const Joi = require('joi');
 const setMongoUpdateSettings = require('../../helpers/setMongoUpdateSettings');
 const userSchema = new Schema(
   {
-    username: { type: String, required: [true, 'Password is required'] },
+    username: { type: String, required: [true, 'Username is required'] },
     email: {
       type: String,
       required: [true, 'Email is required'],
@@ -20,13 +20,19 @@ const userSchema = new Schema(
     },
     token: {
       type: String,
-      default: null,
+      default: '',
+    },
+    refreshToken: {
+      type: String,
+      default: '',
     },
   },
   { versionKey: false, timestamps: true }
 );
+userSchema.post('save', handleMongooseError);
+
 const registerSchema = Joi.object({
-  name: Joi.string().required(),
+  username: Joi.string().required(),
   email: Joi.string().pattern(emailRegex).required(),
   password: Joi.string().min(7).required(),
 });
@@ -34,13 +40,17 @@ const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegex).required(),
   password: Joi.string().min(7).required(),
 });
+
+const refreshSchema = Joi.object({
+  refreshToken: Joi.string().required,
+});
+
 const authSchemas = {
   registerSchema,
   loginSchema,
+  refreshSchema,
 };
 const User = model('user', userSchema);
-userSchema.post('save', handleMongooseError);
-// userSchema.pre('findOneAndUpdate', setMongoUpdateSettings);
 module.exports = {
   User,
   authSchemas,

@@ -1,4 +1,5 @@
 const express = require('express');
+const authentificate = require('../helpers/authentificate.js');
 
 const {
   getAllContacts,
@@ -14,6 +15,7 @@ const validateBody = require('../helpers/validateBody');
 const isValidId = require('../helpers/isValidId');
 
 const contactsRouter = express.Router();
+contactsRouter.use(authentificate);
 
 contactsRouter.get('/', getAllContacts);
 

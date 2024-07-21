@@ -3,10 +3,6 @@ const { Schema, model } = require('mongoose');
 const handleMongooseError = require('../../helpers/handleMongooseError');
 
 const contactSchema = new Schema({
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: 'user',
-  },
   name: {
     type: String,
     required: true,
@@ -14,6 +10,11 @@ const contactSchema = new Schema({
   email: { type: String, required: true },
   phone: { type: String, required: true },
   favorite: { type: Boolean, default: false },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+    required: true,
+  },
 });
 contactSchema.post('save', handleMongooseError);
 const createContactSchema = Joi.object({
