@@ -13,6 +13,15 @@ const userSchema = new Schema(
       unique: true,
     },
     password: { type: String, required: true },
+    avatarUrl: {
+      type: String,
+      default: '',
+    },
+    cloudUrl: {
+      type: String,
+      default: '',
+    },
+
     subscription: {
       type: String,
       enum: ['starter', 'pro', 'business'],

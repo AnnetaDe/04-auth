@@ -3,6 +3,7 @@ const validateBody = require('../helpers/validateBody');
 const authentificate = require('../helpers/authentificate');
 const controller = require('../controllers/authControllers');
 const { authSchemas } = require('../db/models/User');
+const upload = require('../helpers/upload');
 const authRouter = express.Router();
 authRouter.post(
   '/register',
@@ -21,6 +22,12 @@ authRouter.post(
   controller.refresh
 );
 authRouter.patch('/update-user', authentificate, controller.updateUserData);
+authRouter.patch(
+  '/users/avatars',
+  upload.single('avatarUrl'),
+  authentificate,
+  controller.updateAvatar
+);
 
 authRouter.post('/logout', authentificate, controller.logout);
 module.exports = authRouter;
