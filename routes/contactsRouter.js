@@ -13,6 +13,7 @@ const {
 const { schemas } = require('../db/models/Contacts.js');
 const validateBody = require('../helpers/validateBody');
 const isValidId = require('../helpers/isValidId');
+const upload = require('../helpers/upload.js');
 
 const contactsRouter = express.Router();
 contactsRouter.use(authentificate);
