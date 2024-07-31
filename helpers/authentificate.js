@@ -8,7 +8,7 @@ const authentificate = async (req, res, next) => {
   const { authorization = '' } = req.headers;
 
   if (!authorization) {
-    return next(HttpError(401, 'Authorization failed'));
+    return next(HttpError(401, 'Authorization header is required'));
   }
   const [bearer, token] = authorization.split(' ');
   if (bearer !== 'Bearer') {
