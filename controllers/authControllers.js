@@ -49,11 +49,50 @@ const register = async (req, res) => {
   });
 };
 
+const verify = async (req, res) => {
+  const { verificationCode } = req.params;
+  const user = await User.findOne({ verificationCode });
+  if (!user) {
+    throw HttpError(400, 'User not found or already verified');
+  }
+
+  await User.findOneAndUpdate(
+    { _id: user._id },
+    { verify: true, verificationCode: '' }
+  );
+
+  res.json({
+    message: 'Email was verified successfully',
+  });
+};
+
+const resendVerify = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw HttpError(404, 'Email not found');
+  }
+  if (user.verify) {
+    throw HttpError(400, 'Email was already verified');
+  }
+
+  const verifyEmail = {
+    to: email,
+    subject: 'Verify email',
+    html: `<a target="_blank" href="http://localhost:3000/api/auth/verify/${user.verificationCode}">Click verify email</a>`,
+  };
+
+  await sendEmail(verifyEmail);
+
+  res.json({
+    message: 'Verify email resend success',
+  });
+};
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
-  if (!user) {
+  if (!user.verify) {
     throw HttpError(401, 'Email or password invalid');
   }
   const passwordCompare = await bcrypt.compare(password, user.password);
@@ -174,4 +213,6 @@ module.exports = {
   logout: ctrl(logout),
   updateUserData: ctrl(updateUserData),
   updateAvatar: ctrl(updateAvatar),
+  verify: ctrl(verify),
+  resendVerify: ctrl(resendVerify),
 };

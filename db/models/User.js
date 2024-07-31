@@ -61,11 +61,15 @@ const loginSchema = Joi.object({
 const refreshSchema = Joi.object({
   refreshToken: Joi.string().required,
 });
+const authEmailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegex).required(),
+});
 
 const authSchemas = {
   registerSchema,
   loginSchema,
   refreshSchema,
+  authEmailSchema,
 };
 const User = model('user', userSchema);
 module.exports = {

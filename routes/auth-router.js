@@ -15,7 +15,14 @@ authRouter.post(
   validateBody(authSchemas.loginSchema),
   controller.login
 );
+
+authRouter.post(
+  '/verify',
+  validateBody(authSchemas.authEmailSchema),
+  controller.resendVerify
+);
 authRouter.get('/current', authentificate, controller.current);
+authRouter.get('/verify/:verificationCode', controller.verify);
 authRouter.post(
   '/refresh',
   validateBody(authSchemas.refreshSchema),
