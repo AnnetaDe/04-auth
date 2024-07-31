@@ -1,17 +1,19 @@
+require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
-const gravatar = require('gravatar');
 
+const gravatar = require('gravatar');
+const fs = require('fs/promises');
+const cloudinary = require('../helpers/cloudinary');
+const Jimp = require('jimp');
 const { User } = require('../db/models/User');
 
+const upload = require('../helpers/upload');
 const HttpError = require('../helpers/HttpError');
 const ctrl = require('../helpers/ctrl');
 const path = require('path');
-const fs = require('fs/promises');
-const cloudinary = require('../helpers/cloudinary');
-const upload = require('../helpers/upload');
-const Jimp = require('jimp');
+const { nanoid } = require('nanoid');
+const sendEmail = require('../helpers/sendEmail');
 
 const { JWT_SECRET } = process.env;
 
@@ -23,12 +25,23 @@ const register = async (req, res) => {
   }
   const hashPassword = await bcrypt.hash(password, 10);
   const avatarUrl = gravatar.url(email);
+  verificationCode = nanoid();
 
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
     avatarUrl,
+    verificationCode,
   });
+  const verifyEmail = {
+    to: email,
+    subject: 'Verify email',
+    html: `<a target="_blank" href="http://localhost:3000/api/auth/verify/${verificationCode}"> Click verify email</a>`,
+    //change localhost to the domain
+  };
+
+  await sendEmail(verifyEmail);
+
   res.status(201).json({
     name: newUser.username,
     email: newUser.email,
